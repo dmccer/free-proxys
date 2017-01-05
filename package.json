@@ -1,0 +1,27 @@
+{
+  "name": "free-proxys",
+  "version": "1.0.0",
+  "description": "free proxys",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmccer/free-proxys.git"
+  },
+  "keywords": [
+    "free",
+    "proxys"
+  ],
+  "author": "Kane",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmccer/free-proxys/issues"
+  },
+  "homepage": "https://github.com/dmccer/free-proxys#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "request": "^2.79.0"
+  }
+}
