@@ -5,7 +5,7 @@ module.exports = {
   root: root,
   proxy_site: 'http://www.xicidaili.com/nn',
   // 抓取代理页面需要翻墙.....
-  proxy: 'http://60.185.139.88:808',
+  proxy: 'http://127.0.0.1:1080',
   proxys_file: path.resolve(root, './tmp/ips.json'),
   mongodb: {
     name: 'proxys',
