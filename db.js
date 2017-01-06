@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 const data = require('./data');
 
+mongoose.Promise = global.Promise;
+
 function connect() {
   console.info('正在连接数据库...');
   mongoose.connect(data.mongodb.url + ':' + data.mongodb.port + '/' + data.mongodb.name, {

@@ -15,6 +15,21 @@ const PROXY_ANONYM = {
   '高匿': 1,
   '透明': 2
 };
+let proxys = [];
+function getProxy() {
+  if (proxys.length < 100) {
+    return ProxyModel
+      .find({ type: PROXY_TYPE.HTTP })
+      .limit(100)
+      .exec()
+      .then((docs) => {
+        proxys = docs;
+        return proxys[Math.floor(Math.random() * proxys.length)];
+      });
+  }
+
+  return Promise.resolve(Math.floor(proxys[Math.random() * proxys.length]));
+}
 
 function transLive(text) {
   let reg = /[^\d]+/;
@@ -73,7 +88,9 @@ function parser(body, callback) {
   callback(null, ips);
 }
 
-function get_proxy(url, callback) {
+function crawlProxy(url, callback, proxy) {
+  console.log(`${url} -> ${proxy}`);
+
   req(url, function(body, err) {
     if (body == null || err) {
       console.log(`获取代理页面失败:${url}`);
@@ -82,7 +99,7 @@ function get_proxy(url, callback) {
     }
 
     parser(body, callback);
-  });
+  }, proxy ? { proxy: proxy } : null);
 }
 
 let savedCount = 0;
@@ -140,20 +157,26 @@ function analyze() {
     let i = 1;
 
     function start() {
-      get_proxy(`${data.proxy_site}/${i}`, (err, ips) => {
-        save(err, ips);
-        i++;
+      getProxy()
+        .then((proxy) => {
+          console.log(proxy);
+          crawlProxy(`${data.proxy_site}/${i}`, (err, ips) => {
+            save(err, ips);
+            i++;
 
-        if (i < max) {
-          start();
-        }
-      });
+            if (i < max) {
+              start();
+            }
+          }, `http://${proxy.ip}:${proxy.port}`);
+        });
     }
 
     parser(body, (err, ips) => {
       save(err, ips);
       start();
     });
+  }, {
+    proxy: data.proxy
   });
 }
 
